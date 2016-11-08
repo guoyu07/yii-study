@@ -17,8 +17,8 @@ class m161107_123757_create_employee_table extends Migration
             'name' => $this->string(100)->notNull(),
             'lastname' => $this->string(100)->notNull(),
             'patronymic' => $this->string(100),
-            'gender' => $this->boolean(),
-            'pay' => $this->integer(9)->notNull()
+            'gender' => $this->boolean()->notNull(),
+            'pay' => $this->integer(9)
         ]);
     }
 

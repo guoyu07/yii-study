@@ -12,6 +12,9 @@ use app\models\Department;
  */
 class DepartmentSearch extends Department
 {
+    public $countEmployees = 0;
+    public $maxPay = 0;
+
     /**
      * @inheritdoc
      */
@@ -41,7 +44,13 @@ class DepartmentSearch extends Department
      */
     public function search($params)
     {
-        $query = Department::find();
+        $query = DepartmentSearch::find()->select([
+            'count(1) as countEmployees',
+            'max(employee.pay) as maxPay',
+            'department.*'
+        ])->joinWith([
+            'employees'
+        ], FALSE, 'LEFT JOIN')->groupBy('department.id');
 
         // add conditions that should always apply here
 

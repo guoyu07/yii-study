@@ -32,8 +32,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'lastname',
             'patronymic',
-            'gender',
+            [
+                'attribute'=>'gender',
+                'format'=>'text',
+                'value'=> $model->toArray()['gender_label']
+            ],
             'pay',
+            [
+                'attribute'=>'departments',
+                'format'=>'text',
+                'value' => $model->toArray()['departments_label']
+            ],
         ],
     ]) ?>
 

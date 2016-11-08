@@ -43,7 +43,10 @@ class Department extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getDepartments()
+    /**
+     * @return $this
+     */
+    public function getEmployees()
     {
         return $this->hasMany(
             Employee::className(),

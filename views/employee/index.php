@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Employee;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -9,6 +10,7 @@ use yii\grid\GridView;
 
 $this->title = 'Employees';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="employee-index">
 
@@ -24,12 +26,30 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            [
+                'attribute' => 'id',
+                'filter' => '',
+            ],
             'name',
             'lastname',
             'patronymic',
-            'gender',
-            // 'pay',
+            [
+                'attribute'=>'gender',
+                'format'=>'text',
+                'content'=>function($data){
+                    return $data->toArray()['gender_label'];
+                },
+                'filter' => Employee::getGenderList(),
+            ],
+            'pay',
+            [
+                'attribute'=>'departments',
+                'format'=>'text',
+                'content'=>function($data){
+                    return $data->toArray()['departments_label'];
+                },
+                'filter' => Employee::getDepartmentsList(),
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

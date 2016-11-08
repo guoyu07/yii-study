@@ -8,10 +8,6 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $departmentItems [] */
 
-$resultItems = [];
-foreach ($departmentItems as $item) {
-    $resultItems[$item['id']] = $item['name'];
-}
 
 ?>
 
@@ -25,11 +21,11 @@ foreach ($departmentItems as $item) {
 
     <?= $form->field($model, 'patronymic')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'gender')->textInput() ?>
+    <?= $form->field($model, 'gender')->radioList(\app\models\Employee::getGenderList()) ?>
 
     <?= $form->field($model, 'pay')->textInput() ?>
 
-    <?= $form->field($model, 'departments')->checkboxList($resultItems) ?>
+    <?= $form->field($model, 'departments')->checkboxList($departmentItems) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

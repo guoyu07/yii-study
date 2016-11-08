@@ -41,7 +41,7 @@ class EmployeeSearch extends Employee
      */
     public function search($params)
     {
-        $query = Employee::find();
+        $query = Employee::find()->with('departments');
 
         // add conditions that should always apply here
 

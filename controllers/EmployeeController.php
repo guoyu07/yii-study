@@ -69,8 +69,8 @@ class EmployeeController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $departmentItems = Department::find()->asArray()->all();
-            
+            $departmentItems = Employee::getDepartmentsList();
+
             return $this->render('create', [
                 'model' => $model,
                 'departmentItems' => $departmentItems
@@ -91,8 +91,11 @@ class EmployeeController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+
+            $departmentItems = Employee::getDepartmentsList();
             return $this->render('update', [
                 'model' => $model,
+                'departmentItems' => $departmentItems
             ]);
         }
     }
