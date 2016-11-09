@@ -22,6 +22,13 @@ class Employee extends \yii\db\ActiveRecord
     const GENDER_VALUE_WOMAN = 1;
 
     /**
+     * Идентификаторы новых отделов
+     * @var array
+     */
+    public $newDepartmentIds = [];
+
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -65,7 +72,7 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'lastname', 'departments', 'gender'], 'required'],
+            [['name', 'lastname', 'newDepartmentIds', 'gender'], 'required'],
             [['gender', 'pay'], 'integer'],
             [['name', 'lastname', 'patronymic'], 'string', 'max' => 100],
         ];
@@ -102,11 +109,11 @@ class Employee extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param Department[] $departments
+     * @param $departmentsIds int[]
      */
-    public function setDepartments($departments)
+    public function setNewDepartmentsIds($departmentsIds)
     {
-        $this->departments = $departments;
+        $this->newDepartmentIds = (array) $departmentsIds;
     }
     
     /**
@@ -134,86 +141,30 @@ class Employee extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param array $data
-     * @param null $formName
-     * @return bool
-     */
-    public function load($data, $formName = null)
-    {
-        $scope = $formName === null ? $this->formName() : $formName;
-
-        if (isset($data[$scope]) && isset($data[$scope]['departments'])) {
-            $departmentIds = $data[$scope]['departments'];
-            unset($data[$scope]['departments']);
-        } elseif(isset($data['departments'])) {
-            $departmentIds = $data['departments'];
-            unset($data['departments']);
-        }
-        
-        if (isset($departmentIds) && $departmentIds) {
-            /** @var Department[] $departments */
-            $departments = Department::findAll($departmentIds);
-            $this->setDepartments($departments);
-        }
-        
-        return parent::load($data, $formName);
-    }
-
-    /**
      * @param bool $insert
      * @param array $changedAttributes
      * @throws Exception
      */
     public function afterSave($insert, $changedAttributes)
     {
-        foreach ($this->departments as $department) {
-            try {
-                $this->link('departments', $department);
-            } catch (Exception $e) {
-                
-                if ($e->errorInfo[1] != 1062) {
-                    throw $e;
-                }
+        $oldDepartmentIds = $this->getDepartmentsIds();
+        $newDepartmentIds = $this->newDepartmentIds;
+
+        if ($newDepartmentsIds = array_diff($newDepartmentIds, $oldDepartmentIds)) {
+            $newDepartments = Department::findAll($newDepartmentsIds);
+            foreach ($newDepartments as $newDepartment) {
+                $this->link('departments', $newDepartment);
             }
         }
-
-        parent::afterSave($insert, $changedAttributes);
-    }
-
-    /**
-     * @param bool $insert
-     * @return bool
-     */
-    public function beforeSave($insert)
-    {
-        if (!$insert) {
-
-            $allDeaprtment = Employee::find()
-                ->joinWith('departments', false, 'inner JOIN')
-                ->where(['employee.id' => $this->id])
-                ->select([
-                   'department.id'
-                ])
-            ->all();
-
-            $departmentsDelete = array_map(function ($item) {
-                return $item->id;
-            }, $allDeaprtment);
-
-            //получим связи котороые надо удалить
+        
+        if ($deleteDepartmentsIds = array_diff($oldDepartmentIds, $newDepartmentIds)) {
             foreach ($this->departments as $department) {
-                if (false !== $key = array_search($department->id, $departmentsDelete)) {
-                    unset($departmentsDelete[$key]);
-                }
-            }
-
-            //удалим старые связки с отделом
-            foreach ($departmentsDelete as $key => $departmentId) {
-                $this->unlink('departments', $allDeaprtment[$key]);
+                if (in_array($department->id, $deleteDepartmentsIds))
+                $this->unlink('departments', $department);
             }
         }
-
-        return parent::beforeSave($insert);
+        
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /**
@@ -237,5 +188,18 @@ class Employee extends \yii\db\ActiveRecord
         return [
             'default' => self::OP_INSERT | self::OP_UPDATE | self::OP_DELETE
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDepartmentsIds()
+    {
+        $result = [];
+        foreach ($this->departments as $department) {
+            $result[] = $department->id;
+        }
+
+        return $result;
     }
 }

@@ -65,7 +65,7 @@ class EmployeeController extends Controller
     public function actionCreate()
     {
         $model = new Employee();
-
+        $model->setNewDepartmentsIds(Yii::$app->request->post(Employee::class)['departments_ids']);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -88,6 +88,9 @@ class EmployeeController extends Controller
     {
         $model = $this->findModel($id);
 
+        $requestForm = Yii::$app->request->post($model->formName());
+        $model->setNewDepartmentsIds($requestForm ? $requestForm['newDepartmentIds'] : $model->getDepartmentsIds());
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
