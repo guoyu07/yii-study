@@ -29,7 +29,11 @@ class Department extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [
+                ['name'],
+                'required',
+                'message' => Yii::t('app', 'Enter value') . ' {attribute}.'
+            ],
             [['name'], 'string', 'max' => 100],
         ];
     }

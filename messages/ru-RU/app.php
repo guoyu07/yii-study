@@ -11,4 +11,5 @@ return [
     'Departments' => 'Отделы',
     'Create Department' => 'Создать отдел',
     'Create Employee' => 'Создать сотрудника',
+    'Enter value' => 'Введите значение',
 ];
