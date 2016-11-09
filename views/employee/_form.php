@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'patronymic')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'gender')->radioList(\app\models\Employee::getGenderList()) ?>
+    <?= $form->field($model, 'gender')->radioList(\app\models\EmployeeSearch::getGenderValueList()) ?>
 
     <?= $form->field($model, 'pay')->textInput() ?>
 

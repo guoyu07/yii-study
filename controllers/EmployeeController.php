@@ -37,7 +37,7 @@ class EmployeeController extends Controller
     public function actionIndex()
     {
         $searchModel = new EmployeeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -49,11 +49,27 @@ class EmployeeController extends Controller
      * Displays a single Employee model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
+        $searchModel = new EmployeeSearch();
+
+        $dataProvider = $searchModel->search([
+            $searchModel->formName() => [
+                'id' => $id
+            ]
+        ]);
+
+        if (!$dataProvider->getModels()) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $model  = $dataProvider->getModels()[0];
+
+        var_dump($model);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -69,7 +85,7 @@ class EmployeeController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $departmentItems = Employee::getDepartmentsList();
+            $departmentItems = EmployeeSearch::getDepartmentsValueList();
 
             return $this->render('create', [
                 'model' => $model,
@@ -95,7 +111,7 @@ class EmployeeController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
 
-            $departmentItems = Employee::getDepartmentsList();
+            $departmentItems = EmployeeSearch::getDepartmentsValueList();
             return $this->render('update', [
                 'model' => $model,
                 'departmentItems' => $departmentItems
@@ -125,7 +141,7 @@ class EmployeeController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Employee::findOne($id)) !== null) {
+        if (($model = EmployeeSearch::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

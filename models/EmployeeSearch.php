@@ -12,6 +12,8 @@ use app\models\Employee;
  */
 class EmployeeSearch extends Employee
 {
+    public $departmentsValue = '';
+
     /**
      * @inheritdoc
      */
@@ -41,7 +43,13 @@ class EmployeeSearch extends Employee
      */
     public function search($params)
     {
-        $query = Employee::find()->with('departments');
+        $query = EmployeeSearch::find()
+            ->select([
+                'GROUP_CONCAT(DISTINCT department.name ORDER BY department.name ASC SEPARATOR \', \') as departmentsValue',
+                'employee.*'
+            ])->joinWith([
+                'departments'
+            ], FALSE, 'LEFT JOIN')->groupBy('employee.id');
 
         // add conditions that should always apply here
 
@@ -59,15 +67,48 @@ class EmployeeSearch extends Employee
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'gender' => $this->gender,
-            'pay' => $this->pay,
+            'employee.id' => $this->id,
+            'employee.gender' => $this->gender,
+            'employee.pay' => $this->pay,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'patronymic', $this->patronymic]);
+        $query->andFilterWhere(['like', 'employee.name', $this->name])
+            ->andFilterWhere(['like', 'employee.lastname', $this->lastname])
+            ->andFilterWhere(['like', 'employee.patronymic', $this->patronymic]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderValue()
+    {
+        return (string) static::getGenderValueList()[$this->gender];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGenderValueList()
+    {
+        return [
+            static::GENDER_VALUE_MAN => 'м',
+            static::GENDER_VALUE_WOMAN => 'ж'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDepartmentsValueList()
+    {
+        $departmentItems = Department::find()->asArray()->all();
+        $resultItems = [];
+        foreach ($departmentItems as $item) {
+            $resultItems[$item['id']] = $item['name'];
+        }
+
+        return $resultItems;
     }
 }

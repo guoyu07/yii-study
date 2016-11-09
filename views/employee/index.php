@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Employee;
+use app\models\EmployeeSearch;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -37,18 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'gender',
                 'format'=>'text',
                 'content'=>function($data){
-                    return $data->genderLabel;
+                    return $data->genderValue;
                 },
-                'filter' => Employee::getGenderList(),
+                'filter' => EmployeeSearch::getGenderValueList(),
             ],
             'pay',
             [
                 'attribute'=>'departments',
                 'format'=>'text',
                 'content'=>function($data){
-                    return $data->departmentsLabel;
+                    return $data->departmentsValue;
                 },
-                'filter' => Employee::getDepartmentsList(),
+                'filter' => EmployeeSearch::getDepartmentsValueList(),
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

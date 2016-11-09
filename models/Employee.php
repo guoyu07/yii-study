@@ -37,39 +37,6 @@ class Employee extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return array
-     */
-    public static function getGenderList()
-    {
-        return static::getGenderValuesLabels();
-    }
-
-    /**
-     * @return array
-     */
-    private static function getGenderValuesLabels()
-    {
-        return [
-            static::GENDER_VALUE_MAN => 'м',
-            static::GENDER_VALUE_WOMAN => 'ж'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getDepartmentsList()
-    {
-        $departmentItems = Department::find()->asArray()->all();
-        $resultItems = [];
-        foreach ($departmentItems as $item) {
-            $resultItems[$item['id']] = $item['name'];
-        }
-        
-        return $resultItems;
-    }
-
-    /**
      * @inheritdoc
      */
     public function rules()
@@ -117,28 +84,6 @@ class Employee extends \yii\db\ActiveRecord
     public function setNewDepartmentsIds($departmentsIds)
     {
         $this->newDepartmentIds = (array) $departmentsIds;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getGenderLabel()
-    {
-        return (string) static::getGenderValuesLabels()[$this->gender];
-    }
-
-    /**
-     * @return string
-     */
-    public function getDepartmentsLabel()
-    {
-        $departmentsName = [];
-
-        foreach ($this->departments as $department) {
-            $departmentsName[] = $department->name;
-        }
-
-        return implode(', ', $departmentsName);
     }
 
     /**

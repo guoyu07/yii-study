@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Employee */
+/* @var $model app\models\EmployeeSearch */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Employees', 'url' => ['index']];
@@ -35,13 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'gender',
                 'format'=>'text',
-                'value'=> $model->genderLabel
+                'value'=> $model->genderValue
             ],
             'pay',
             [
                 'attribute'=>'departments',
                 'format'=>'text',
-                'value' => $model->departmentsLabel
+                'value' => $model->departmentsValue
             ],
         ],
     ]) ?>
