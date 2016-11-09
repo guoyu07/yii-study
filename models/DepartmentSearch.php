@@ -45,8 +45,8 @@ class DepartmentSearch extends Department
     public function search($params)
     {
         $query = DepartmentSearch::find()->select([
-            'count(1) as countEmployees',
-            'max(employee.pay) as maxPay',
+            'count(DISTINCT ' .Employee::tableName() . '.id) as countEmployees',
+            'max(' . Employee::tableName(). '.pay) as maxPay',
             static::tableName() . '.*'
         ])->joinWith([
             'employees'

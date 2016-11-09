@@ -35,13 +35,7 @@ class DepartmentController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new DepartmentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->renderList();
     }
 
     /**
@@ -103,7 +97,10 @@ class DepartmentController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if (Yii::$app->request->isAjax)
+            return $this->renderList();
+        else
+            return $this->redirect(['index']);
     }
 
     /**
@@ -120,5 +117,21 @@ class DepartmentController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function renderList()
+    {
+        $searchModel = new DepartmentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $method = Yii::$app->request->isAjax ? 'renderAjax' : 'render';
+
+        return $this->$method('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

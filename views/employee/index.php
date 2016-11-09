@@ -54,7 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => EmployeeSearch::getDepartmentsValueList(),
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'data-pjax' => '#model-grid',
+                            'data-method' => 'post'
+                        ]);
+                    },
+                ],
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
