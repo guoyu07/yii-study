@@ -45,14 +45,13 @@ class EmployeeSearch extends Employee
     {
         $query = EmployeeSearch::find()
             ->select([
-                'GROUP_CONCAT(DISTINCT department.name ORDER BY department.name ASC SEPARATOR \', \') as departmentsValue',
-                'employee.*'
+                'GROUP_CONCAT(DISTINCT ' . Department::tableName() . '.name ORDER BY ' . Department::tableName() . '.name ASC SEPARATOR \', \') as departmentsValue',
+                static::tableName() . '.*'
             ])->joinWith([
                 'departments'
-            ], FALSE, 'LEFT JOIN')->groupBy('employee.id');
+            ], FALSE, 'LEFT JOIN')->groupBy(static::tableName() . '.id');
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -67,14 +66,14 @@ class EmployeeSearch extends Employee
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'employee.id' => $this->id,
-            'employee.gender' => $this->gender,
-            'employee.pay' => $this->pay,
+            static::tableName() . '.id' => $this->id,
+            static::tableName() . '.gender' => $this->gender,
+            static::tableName() . '.pay' => $this->pay,
         ]);
 
-        $query->andFilterWhere(['like', 'employee.name', $this->name])
-            ->andFilterWhere(['like', 'employee.lastname', $this->lastname])
-            ->andFilterWhere(['like', 'employee.patronymic', $this->patronymic]);
+        $query->andFilterWhere(['like', static::tableName() . '.name', $this->name])
+            ->andFilterWhere(['like', static::tableName() . '.lastname', $this->lastname])
+            ->andFilterWhere(['like', static::tableName() . '.patronymic', $this->patronymic]);
 
         return $dataProvider;
     }

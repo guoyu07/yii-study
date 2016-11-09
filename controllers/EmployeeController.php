@@ -67,7 +67,6 @@ class EmployeeController extends Controller
 
         $model  = $dataProvider->getModels()[0];
 
-        var_dump($model);
         return $this->render('view', [
             'model' => $model,
         ]);

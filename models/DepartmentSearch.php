@@ -47,10 +47,10 @@ class DepartmentSearch extends Department
         $query = DepartmentSearch::find()->select([
             'count(1) as countEmployees',
             'max(employee.pay) as maxPay',
-            'department.*'
+            static::tableName() . '.*'
         ])->joinWith([
             'employees'
-        ], FALSE, 'LEFT JOIN')->groupBy('department.id');
+        ], FALSE, 'LEFT JOIN')->groupBy(static::tableName() . '.id');
 
         // add conditions that should always apply here
 
@@ -68,10 +68,10 @@ class DepartmentSearch extends Department
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            static::tableName() . '.id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', static::tableName() . '.name', $this->name]);
 
         return $dataProvider;
     }
