@@ -7,8 +7,8 @@ use yii\helpers\Html;
 /* @var $model app\models\Employee */
 /* @var $departmentItems [] */
 
-$this->title = 'Create Employee';
-$this->params['breadcrumbs'][] = ['label' => 'Employees', 'url' => ['index']];
+$this->title = Yii::t('app','Create Employee');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app','Employees'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

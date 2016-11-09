@@ -14,6 +14,7 @@ use Yii;
  */
 class Department extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -28,6 +29,7 @@ class Department extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 100],
         ];
     }
@@ -38,8 +40,10 @@ class Department extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
+            'id' => Yii::t('app/department', 'ID'),
+            'name' => Yii::t('app/department', 'Name'),
+           // 'name' => Yii::t('app/department', 'Count Employees'),
+            
         ];
     }
 

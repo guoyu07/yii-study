@@ -56,6 +56,9 @@ class DepartmentSearch extends Department
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5,
+            ]
         ]);
 
         $this->load($params);
@@ -74,5 +77,16 @@ class DepartmentSearch extends Department
         $query->andFilterWhere(['like', static::tableName() . '.name', $this->name]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'countEmployees' => Yii::t('app/department', 'Count employees'),
+            'maxPay' => Yii::t('app/department', 'Max pay'),
+        ]);
     }
 }

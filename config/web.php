@@ -6,6 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'ru-RU',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -43,8 +44,29 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'employee/<id:\d+>'=>'employee/view',
+                'employee/edit/<id:\d+>'=>'employee/update',
+                'department/<id:\d+>'=>'department/view',
+                'department/edit/<id:\d+>'=>'department/update',
+                'employee/per-page_<per-page:\d+>/page_<page:\d+>/'=>'employee/index',
+                'department/per-page_<per-page:\d+>/page_<page:\d+>/'=>'department/index',
             ],
         ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app'       => 'app.php',
+                        'app/employee' => 'employee.php',
+                        'app/department' => 'department.php',
+                    ],
+                ],
+            ]
+        ]
+
     ],
     'params' => $params,
 ];

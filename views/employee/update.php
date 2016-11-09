@@ -4,11 +4,12 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Employee */
+/* @var $departmentItems array */
 
-$this->title = 'Update Employee: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Employees', 'url' => ['index']];
+$this->title = Yii::t('app','Update Employee: ') . $model->name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app','Employees'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app','Update');
 ?>
 <div class="employee-update">
 

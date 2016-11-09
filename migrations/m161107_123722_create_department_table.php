@@ -14,7 +14,7 @@ class m161107_123722_create_department_table extends Migration
     {
         $this->createTable('department', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(100)
+            'name' => $this->string(100)->notNull()
         ]);
     }
 

@@ -54,13 +54,13 @@ class Employee extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'lastname' => 'Lastname',
-            'patronymic' => 'Patronymic',
-            'gender' => 'Gender',
-            'pay' => 'Pay',
-            'departments' => 'Departments'
+            'id' => Yii::t('app/employee', 'ID'),
+            'name' => Yii::t('app/employee', 'Name'),
+            'lastname' => Yii::t('app/employee', 'Last name'),
+            'patronymic' => Yii::t('app/employee', 'Patronymic'),
+            'gender' => Yii::t('app/employee', 'Gender'),
+            'pay' => Yii::t('app/employee', 'Pay'),
+            'departments' => Yii::t('app/employee', 'Departments'),
         ];
     }
 

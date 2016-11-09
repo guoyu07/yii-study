@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Department;
+use app\models\DepartmentSearch;
+use app\models\Employee;
+use app\models\EmployeeSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -60,7 +64,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $employees = EmployeeSearch::find()
+            ->with('departments')->all();
+        
+        $departments = DepartmentSearch::find()->all();
+        
+        return $this->render('index', [
+            'employees' => $employees,
+            'departments' => $departments
+        ]);
     }
 
     /**
