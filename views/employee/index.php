@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'gender',
                 'format'=>'text',
                 'content'=>function($data){
-                    return $data->toArray()['gender_label'];
+                    return $data->genderLabel;
                 },
                 'filter' => Employee::getGenderList(),
             ],
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'departments',
                 'format'=>'text',
                 'content'=>function($data){
-                    return $data->toArray()['departments_label'];
+                    return $data->departmentsLabel;
                 },
                 'filter' => Employee::getDepartmentsList(),
             ],

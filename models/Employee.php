@@ -55,6 +55,9 @@ class Employee extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function getDepartmentsList()
     {
         $departmentItems = Department::find()->asArray()->all();
@@ -117,27 +120,25 @@ class Employee extends \yii\db\ActiveRecord
     }
     
     /**
-     * @return array
+     * @return string
      */
-    public function fields()
+    public function getGenderLabel()
     {
-        $fields = parent::fields();
+        return (string) static::getGenderValuesLabels()[$this->gender];
+    }
 
-        $fields['gender_label'] = function () {
-            return static::getGenderValuesLabels()[$this->gender];
-        };
+    /**
+     * @return string
+     */
+    public function getDepartmentsLabel()
+    {
+        $departmentsName = [];
 
-        $fields['departments_label'] = function () {
-            $departmentsName = [];
+        foreach ($this->departments as $department) {
+            $departmentsName[] = $department->name;
+        }
 
-            foreach ($this->departments as $department) {
-                $departmentsName[] = $department->name;
-            }
-
-            return implode(', ', $departmentsName);
-        };
-
-        return $fields;
+        return implode(', ', $departmentsName);
     }
 
     /**
